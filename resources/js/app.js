@@ -19,11 +19,14 @@ window.Vue = require('vue').default;
 
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+window.eventBus = new Vue();
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('chat-message-component',require('./components/ChatMessagesComponent.vue').default);
 Vue.component('chat-form-component',require('./components/ChatFormComponent.vue').default);
 Vue.component('user-component',require('./components/UserComponent.vue').default);
+Vue.component('chat-default-component',require('./components/ChatDefaultComponent.vue').default);
+Vue.component('chat-panel-heading-component',require('./components/ChatPanelheadingComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -36,28 +39,30 @@ const app = new Vue({
 
     data: {
         messages: [],
-        users:[]
+        users:[],
+        recevier_id:'',
     },
 
     created() {
-        this.fetchMessages();
         this.fetchUsers();
+
         window.Echo.private(`chat`).listen('MessageSent', (e) => {
-
-            if(e.loggedUser === e.message.user_id){
-
+            if(e.message.channel === `${window.loggedInUserId}:${this.recevier_id}` || e.message.channel === `${this.recevier_id}:${window.loggedInUserId}`) {
+                console.log("asdasd");
                 this.messages.push({
                     message: e.message.message,
                     user: e.user
                 });
             }
-
         });
     },
 
     methods: {
+
         fetchMessages() {
-            axios.get('/messages').then(response => {
+            console.log("call");
+            axios.post(`/fetchmessages/${this.recevier_id}`).then(response => {
+                debugger;
                 this.messages = response.data;
                 console.log(response.data);
             });
@@ -70,11 +75,21 @@ const app = new Vue({
             });
         },
         addMessage(message) {
-            this.messages.push(message);
-
+            console.log("MESSAGE", message);
+            message.channel = `${message.receiver_id}:${message.sender_id}`;
+            if(message.loggedUser === message.message.user_id) {
+                this.messages.push(message);
+            }
             axios.post('/messages', message).then(response => {
                 console.log(response.data);
             });
-        }
+        },
+
+    },
+    mounted() {
+        window.eventBus.$on('chatuser', (payload) => {
+            this.recevier_id = payload.id;
+            this.fetchMessages();
+        })
     }
 });

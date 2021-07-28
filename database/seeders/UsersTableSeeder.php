@@ -21,38 +21,33 @@ class UsersTableSeeder extends Seeder
                 'name' => "Sam Drick",
                 'email' => "samdrick@gmail.com",
                 'password' => Hash::make("123456"),
+                'isActive' => 0
             ],
 
             [
                 'name' => "Novus Logics",
                 'email' => "novuslogic@gmail.com",
                 'password' => Hash::make("123456"),
+                'isActive' => 0
             ],
             [
                 'name' => "Ajay Diwakar",
                 'email' => "ajaydiwakar@gmail.com",
                 'password' => Hash::make("123456"),
+                'isActive' => 0
             ],
             [
                 'name' => "Wilson Palkuri",
                 'email' => "wilsonpalkuri@gmail.com",
                 'password' => Hash::make("123456"),
+                'isActive' => 0
             ],
             [
                 'name' => "John Abram",
                 'email' => "johnabram@gmail.com",
                 'password' => Hash::make("123456"),
+                'isActive' => 0
             ],
-            [
-                'name' => "somany Christ ",
-                'email' => "somanychrist@gmail.com",
-                'password' => Hash::make("123456"),
-            ],
-            [
-                'name' => "jd",
-                'email' => "jd@gmail.com",
-                'password' => Hash::make("123456"),
-            ]
         ]);
     }
 }

@@ -17,17 +17,21 @@ class ChatsController extends Controller
 
     public function index()
     {
+        $updateStatus = User::find(auth()->user()->id);
+        $updateStatus->isActive = 1;
+        $updateStatus->save();
         return view('chat');
     }
 
-    public function fetchMessages()
+    public function fetchMessages(Request  $request)
     {
-        return Message::with('user')->where('user_id',auth()->user()->id)->get();
+
+        return Message::with('user')->where('sender_id',auth()->user()->id)->where('receiver_id',$request->receiver_id)->get();
     }
 
     public function fetchUsers()
     {
-        return User::get();
+        return User::where('id','!=',auth()->user()->id)->get();
     }
 
 
@@ -36,9 +40,13 @@ class ChatsController extends Controller
     {
         $user = Auth::user();
 
-        $message = $user->messages()->create([
-            'message' => $request->input('message')
-        ]);
+        $message = new Message;
+        $message->message = $request->input('message');
+        $message->sender_id = auth()->user()->id;
+        $message->receiver_id = $request->input('recevier_id');
+        $message->type = $request->input('type');
+        $message->save();
+
         broadcast(new MessageSent($user, $message))->toOthers();
         return ['status' => 'Message Sent!'];
     }

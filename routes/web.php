@@ -23,6 +23,6 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/', [App\Http\Controllers\ChatsController::class,'index'])->name('index');
-Route::get('messages', [App\Http\Controllers\ChatsController::class,'fetchMessages'])->name('fetchMessages');
+Route::post('fetchmessages/{receiver_id}', [App\Http\Controllers\ChatsController::class,'fetchMessages'])->name('fetchMessages');
 Route::get('users', [App\Http\Controllers\ChatsController::class,'fetchUsers'])->name('fetchUsers');
 Route::post('messages', [App\Http\Controllers\ChatsController::class,'sendMessage'])->name('sendMessage');

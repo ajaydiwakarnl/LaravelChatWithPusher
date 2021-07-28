@@ -15,22 +15,32 @@
 export default {
     name: "ChatFormComponent",
     props: ['user'],
-
     data() {
         return {
-            newMessage: ''
+            newMessage: '',
+            recevier_id:''
         }
     },
 
     methods: {
         sendMessage() {
             this.$emit('messagesent', {
-                user: this.user,
-                message: this.newMessage
+                message: this.newMessage,
+                sender_id: window.loggedInUserId,
+                recevier_id: this.recevier_id,
+                channel: `${this.user.id}:${this.recevier_id}`,
+                type: 1,
             });
 
             this.newMessage = ''
+
         }
+    },
+    mounted() {
+        window.eventBus.$on('chatuser', (payload) => {
+            this.recevier_id = payload.id;
+        });
+        window.loggedInUserId = this.user.id;
     }
 }
 </script>
