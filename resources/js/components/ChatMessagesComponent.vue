@@ -15,7 +15,7 @@
                 <div class="chat-body clearfix">
                     <div class="header">
                         <strong class="primary-font">
-                            {{ message.sender_id }}
+                            {{ message.user.name }}
                         </strong>
                     </div>
                     <p>

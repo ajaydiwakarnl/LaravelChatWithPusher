@@ -18,17 +18,20 @@ export default {
     data() {
         return {
             newMessage: '',
-            recevier_id:''
+            receiver_id:''
         }
     },
 
     methods: {
         sendMessage() {
+
             this.$emit('messagesent', {
                 message: this.newMessage,
+                user:this.user,
+                user_id:window.loggedInUserId,
                 sender_id: window.loggedInUserId,
-                recevier_id: this.recevier_id,
-                channel: `${this.user.id}:${this.recevier_id}`,
+                receiver_id: this.receiver_id,
+                channel: `${this.user.id}:${this.receiver_id}`,
                 type: 1,
             });
 
@@ -38,7 +41,7 @@ export default {
     },
     mounted() {
         window.eventBus.$on('chatuser', (payload) => {
-            this.recevier_id = payload.id;
+            this.receiver_id = payload.id;
         });
         window.loggedInUserId = this.user.id;
     }

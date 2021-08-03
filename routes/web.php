@@ -26,3 +26,4 @@ Route::get('/', [App\Http\Controllers\ChatsController::class,'index'])->name('in
 Route::post('fetchmessages/{receiver_id}', [App\Http\Controllers\ChatsController::class,'fetchMessages'])->name('fetchMessages');
 Route::get('users', [App\Http\Controllers\ChatsController::class,'fetchUsers'])->name('fetchUsers');
 Route::post('messages', [App\Http\Controllers\ChatsController::class,'sendMessage'])->name('sendMessage');
+Route::post('searchUser/{keyword}', [App\Http\Controllers\ChatsController::class,'searchUsers'])->name('searchUsers');
